@@ -26,14 +26,17 @@ def create_dataset(inputs_encoder: EnvironmentsEncoder, output_directory: str):
     for path in paths:
         logging.info(f'Loading snapshot from {path}')
         snapshot = Snapshot.load(path)
+
         logging.info('Encoding particles environments')
         inputs.extend(inputs_encoder.encode_particles_environments(snapshot, TARGET_SPECIES))
+
         logging.info('Extracting particles propensities')
         targets.extend(snapshot.get_particles_propensities(TARGET_SPECIES))
 
     logging.info(f'Saving dataset in {output_path}')
     df_inputs = pd.DataFrame(np.array(inputs))
     df_inputs.to_csv(f'{output_path}inputs_{TARGET_SPECIES}.csv', index=False)
+
     df_targets = pd.DataFrame(np.array(targets))
     df_targets.to_csv(f'{output_path}targets_{TARGET_SPECIES}.csv', index=False)
 

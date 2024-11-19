@@ -23,13 +23,9 @@ class Trainer:
             loss.backward()
             optimizer.step()
 
-        test_loader = DataLoader(train_data, batch_size=self.batch_size, shuffle=False, drop_last=False)
         model.eval()
-        loss = 0.
         with torch.no_grad():
-            for inputs, targets in test_loader:
-                inputs, targets = inputs.to(device), targets.to(device)
-                outputs = model(inputs)
-                loss += self.criterion(outputs, targets)
-
-        return loss / len(train_data)
+            outputs = model(train_data.inputs)
+        loss = self.criterion(outputs, train_data.targets)
+        
+        return float(loss)

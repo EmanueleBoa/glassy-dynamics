@@ -37,7 +37,7 @@ def create_dataset(inputs_encoder: EnvironmentsEncoder, output_directory: str):
     df_inputs = pd.DataFrame(np.array(inputs))
     df_inputs.to_csv(f'{output_path}inputs_{TARGET_SPECIES}.csv', index=False)
 
-    df_targets = pd.DataFrame(np.array(targets))
+    df_targets = pd.DataFrame(np.array(targets), columns=snapshot.times)
     df_targets.to_csv(f'{output_path}targets_{TARGET_SPECIES}.csv', index=False)
 
 

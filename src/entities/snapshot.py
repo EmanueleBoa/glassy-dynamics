@@ -28,10 +28,12 @@ class Snapshot:
         propensities_path = f'{path}{PROPENSITIES_FILE_NAME}'
         with open(propensities_path, 'r') as file:
             propensities = np.array([line.split() for line in file.readlines()], dtype=float).T
+            propensities = propensities[:, 1:]
 
         times_path = f'{path}{TIMES_FILE_NAME}'
         with open(times_path, 'r') as file:
             times = np.array(file.readlines(), dtype=float)
+            times = times[1:]
 
         return cls(box, particles, propensities, times)
 
@@ -44,7 +46,7 @@ class Snapshot:
     def get_particles_propensities(self, target_species: Optional[str] = None) -> np.ndarray:
         if target_species is None:
             return self.propensities
-        
+
         return self.propensities[self._get_species_indices(target_species)]
 
     def get_other_species(self, species: str) -> str:

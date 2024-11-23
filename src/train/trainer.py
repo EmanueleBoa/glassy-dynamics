@@ -1,6 +1,6 @@
 import torch
 from torch import nn
-from torch.optim import Adam
+from torch.optim import Optimizer
 from torch.utils.data import DataLoader
 
 from src.train.glassy_dataset import GlassyDataset
@@ -11,7 +11,7 @@ class Trainer:
         self.batch_size = batch_size
         self.criterion = nn.MSELoss()
 
-    def train_iteration(self, model: nn.Module, optimizer: Adam, train_data: GlassyDataset,
+    def train_iteration(self, model: nn.Module, optimizer: Optimizer, train_data: GlassyDataset,
                         device: torch.device) -> float:
         train_loader = DataLoader(train_data, batch_size=self.batch_size, shuffle=True, drop_last=True)
         model.train()
@@ -25,7 +25,7 @@ class Trainer:
 
         model.eval()
         with torch.no_grad():
-            outputs = model(train_data.inputs)
-        loss = self.criterion(outputs, train_data.targets)
-        
+            outputs = model(train_data.inputs.to(device))
+        loss = self.criterion(outputs, train_data.targets.to(device))
+
         return float(loss)
